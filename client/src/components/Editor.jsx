@@ -39,7 +39,7 @@ function Editor(){
           <div className='col'>
             <CodeMirror
               className='cm2'
-              value={out}
+              value={data[activeTabIndex].salida}
               width='100%'
               height='100%'
               readOnly={true}

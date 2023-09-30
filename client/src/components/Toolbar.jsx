@@ -44,6 +44,31 @@ function Toolbar() {
     }
   }
 
+  const guadar = () => {
+    const newData = [...data];
+    const blob = new Blob([newData[activeTabIndex].contenido], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = newData[activeTabIndex].nombre;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  const cerrar = () => {
+    if (data.length > 1){
+      const newData = [...data];
+    newData.splice(activeTabIndex, 1);
+    setData(newData);
+    if (activeTabIndex > 0) {
+      setActiveTabIndex(activeTabIndex - 1);
+    }
+    }
+  }
+
     return (
       <div className="toolbar">
         <nav className="navbar navbar-expand-lg navbar-dark bg-danger">
@@ -88,9 +113,9 @@ function Toolbar() {
                       </label>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <button className="dropdown-item" onClick={guadar}>
                         Guardar
-                      </a>
+                      </button>
                     </li>
                     
                   </ul>
@@ -131,6 +156,9 @@ function Toolbar() {
                       </a>
                     </li>
                   </ul>
+                </li>
+                <li className="nav-item">
+                      <button className="nav-link active" onClick={cerrar}>Cerrar pestaña</button>
                 </li>
               </ul>
             </div>
