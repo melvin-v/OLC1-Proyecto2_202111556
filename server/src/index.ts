@@ -1,13 +1,13 @@
 import express from 'express'
-const app = express()
-app.use(express.json())
+import cors from 'cors';
+import analyzeRouter from './routes/analyze.route.js';
 
+const app = express()
 const PORT = 3000
 
-app.get('/', (_, res) => {
-    console.log('GET /')
-    res.send('Hello World!')
-})
+app.use(cors());
+app.use(express.json());
+app.use('/', analyzeRouter)
 
 app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running at localhost:${PORT}`)
