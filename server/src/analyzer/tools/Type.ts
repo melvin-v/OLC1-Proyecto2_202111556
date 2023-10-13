@@ -1,10 +1,10 @@
 export enum type {
     INT     = 'int',
-    STRING  = 'string',
     BOOLEAN = 'boolean',
     VARCHAR = 'varchar',
     DATE    = 'date',
-    DOUBLE  = 'double'
+    DOUBLE  = 'double',
+    NULL    = 'null'
 }
 
 export enum arithmeticOperator {
