@@ -1,4 +1,4 @@
-import { Instruccion } from "../abstract/Instruccion.js";
+import { Instruccion } from "../abstract/Instruction.js";
 import { Node } from "../abstract/Node.js";
 import Environment from "../tools/Environment.js";
 import Exception from "../tools/Exception.js";
@@ -7,7 +7,7 @@ import Symbol from "../tools/Symbol.js";
 import Tree from "../tools/Tree.js";
 import { type } from "../tools/Type.js";
 
-export class Identifier implements Instruccion {
+export class Identificador implements Instruccion {
 
     public id: string;
     public type: type;

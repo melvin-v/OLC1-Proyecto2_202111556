@@ -1,4 +1,4 @@
-import { Instruccion } from "../abstract/Instruccion.js";
+import { Instruccion } from "../abstract/Instruction.js";
 import { Node } from "../abstract/Node.js";
 import Environment from "../tools/Environment.js";
 import Exception from "../tools/Exception.js";
@@ -6,7 +6,7 @@ import ReturnType from "../tools/ReturnType.js";
 import Tree from "../tools/Tree.js";
 import { type } from "../tools/Type.js";
 
-export class Arithmetic implements Instruccion {
+export class Aritmetica implements Instruccion {
 
     public operator: string;
     public exp1: Instruccion;

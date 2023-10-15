@@ -1,4 +1,4 @@
-import { Instruccion } from "../abstract/Instruccion.js";
+import { Instruccion } from "../abstract/Instruction.js";
 import { Node } from "../abstract/Node.js";
 import Environment from "../tools/Environment.js";
 import Exception from "../tools/Exception.js";

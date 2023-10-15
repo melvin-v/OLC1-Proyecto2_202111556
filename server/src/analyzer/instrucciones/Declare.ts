@@ -1,4 +1,4 @@
-import { Instruccion } from "../abstract/Instruccion.js";
+import { Instruccion } from "../abstract/Instruction.js";
 import { type } from "../tools/Type.js";
 import Tree from "../tools/Tree.js";
 import Environment from "../tools/Environment.js";
