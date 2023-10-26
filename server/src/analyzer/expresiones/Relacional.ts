@@ -1,20 +1,19 @@
-import { Instruccion } from "../abstract/Instruction.js";
+import { Expresion } from "../abstract/Expression.js";
 import { Node } from "../abstract/Node.js";
 import Environment from "../tools/Environment.js";
-import Exception from "../tools/Exception.js";
 import ReturnType from "../tools/ReturnType.js";
 import Tree from "../tools/Tree.js";
-import { relationalOperator, type } from "../tools/Type.js";
+import { relationalOperator, Type } from "../tools/Type.js";
 
-export class Relacional implements Instruccion {
+export class Relacional implements Expresion {
 
-    public exp1: Instruccion;
-    public exp2: Instruccion;
+    public exp1: Expresion;
+    public exp2: Expresion;
     public operator: relationalOperator;
     public row: number;
     public column: number;
 
-    constructor(exp1: Instruccion, exp2: Instruccion, operator: relationalOperator, row: number, column: number) {
+    constructor(exp1: Expresion, exp2: Expresion, operator: relationalOperator, row: number, column: number) {
         this.exp1 = exp1;
         this.exp2 = exp2;
         this.operator = operator;
@@ -23,29 +22,13 @@ export class Relacional implements Instruccion {
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        let left: ReturnType;
-        let right: ReturnType;
-
-        left = this.exp1.getValue(tree, table);
-
-        if (left.value instanceof Exception) {
-            // Semantic Error
-            return left;
-        }
-
-        right = this.exp2.getValue(tree, table);
-
-        if (right.value instanceof Exception) {
-            // Semantic Error
-            return right;
-        }
+        const left = this.exp1.getValue(tree, table);
+        const right = this.exp2.getValue(tree, table);
 
         if (Object.values(relationalOperator).includes(this.operator)) {
-            return new ReturnType(type.BOOLEAN, this.operate(Number(left.value), Number(right.value), this.operator));
-        } else {
-            // Semantic Error
-            return new ReturnType(type.INT, new Exception("Semantic", `The operator: ${this.operator} not be a relational operator`, this.row, this.column, table.name));
-        }
+            return new ReturnType(Type.BOOLEAN, this.operate(Number(left.value), Number(right.value), this.operator));
+        } 
+        return new ReturnType(Type.NULL, null);
     }
 
     operate(exp1: number, exp2: number, op: relationalOperator): string {
@@ -63,10 +46,6 @@ export class Relacional implements Instruccion {
             case relationalOperator.MENORIGUAL:
                 return String(exp1 <= exp2).toLowerCase();
         }
-    }
-
-    interpret(_: Tree, __: Environment) {
-        
     }
 
     getAST(): Node {

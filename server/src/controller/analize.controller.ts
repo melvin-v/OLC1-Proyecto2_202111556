@@ -33,9 +33,7 @@ const interpret = (bufferStrem: string): outParse => {
     let globalTable: Environment | null;
 
     let instructions: Array<Instruccion>;
-
-    clean_errors();
-
+    console.log(bufferStrem);
     instructions = grammar.parse(bufferStrem);
     
     tree = new Tree(instructions);
@@ -52,7 +50,6 @@ const interpret = (bufferStrem: string): outParse => {
     rootAst.addChildsNode(value);
 
     let ast = tree.getDot(rootAst, false);
-    
     return {
         "console": tree.console,
         "ast": ast,

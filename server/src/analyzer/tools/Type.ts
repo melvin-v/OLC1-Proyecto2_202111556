@@ -1,18 +1,20 @@
-export enum type {
-    INT     = 'int',
-    BOOLEAN = 'boolean',
-    VARCHAR = 'varchar',
-    DATE    = 'date',
-    DOUBLE  = 'double',
-    NULL    = 'null'
+export enum Type {
+    INT,
+    BOOLEAN,
+    VARCHAR,
+    DATE,
+    DOUBLE,
+    NULL,
+    NEGATIVE
 }
 
-export enum arithmeticOperator {
-    PLUS    = '+',
-    MINUS   = '-',
-    MULT    = '*',
-    DIV     = '/',
-    MOD     = '%'
+export enum ArithmeticOperator {
+    PLUS,
+    MINUS,
+    MULT,
+    DIV,
+    MOD,
+    DATE
 }
 
 export enum relationalOperator {

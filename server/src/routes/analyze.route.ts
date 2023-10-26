@@ -3,6 +3,6 @@ import { analyze } from "../controller/analize.controller.js";
 
 const router = Router();
 
-router.post('/analyze', analyze);
+router.post('/analizar', analyze);
 
 export default router;

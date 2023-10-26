@@ -1,4 +1,3 @@
-import Exception from "./Exception.js";
 import Symbol from "./Symbol.js";
 
 export default class Environment {
@@ -13,18 +12,15 @@ export default class Environment {
         this.table = new Map<string, Symbol>();
     }
 
-    public setTable(symbol: Symbol) {
-        if (this.table.has(symbol.id)) {
-            return new Exception("Semantic", `The variable ${symbol.id} already definited on scope`, symbol.row, symbol.column, this.name);
+    public saveSymbol(symbol: Symbol) {
+        if (!this.getSymbol(symbol.id)){
+            symbol.environment = this.name;
+            this.table.set(symbol.id, symbol);
         }
-
-        symbol.environment = this.name;
-        this.table.set(symbol.id, symbol);
-
         return undefined;
     }
 
-    public getTable(id: string) {
+    public getSymbol(id: string) {
         let currentTable: Environment | undefined = this;
 
         while (currentTable != undefined) {
@@ -38,25 +34,21 @@ export default class Environment {
         return undefined;
     }
 
-    public updateTable(symbol: Symbol) {
+    public updateSymbol(symbol: Symbol) {
         let currentTable: Environment | undefined = this;
 
         while (currentTable != undefined) {
             if (currentTable.table.has(symbol.id)) {
-                let currentSymbol: Symbol | undefined = currentTable.table.get(symbol.id);
-
-                if (currentSymbol?.type === symbol.type) {
-                    currentSymbol.value = symbol.value;
-                    return undefined;
+                for (let entry of Array.from(currentTable.table)) {
+                    if (entry[0] === symbol.id) {
+                        entry[1].value = symbol.value;
+                    }
                 }
-
-                return new Exception("Semantic", `The variable: ${currentSymbol?.id} isn't at type: ${symbol.type}`, symbol.row, symbol.column, this.name);
             }
-
             currentTable = currentTable.prev;
         }
 
-        return new Exception("Semantic", `The id: ${symbol.id} doesn't exist in current context`, symbol.row, symbol.column, this.name);
+        return undefined;
     }
 
 }

@@ -69,6 +69,21 @@ function Toolbar() {
     }
   }
 
+  const ejecutar = () => {
+    fetch('http://localhost:3000/analizar', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        "code": data[activeTabIndex].contenido
+      })
+    }).then(res => res.json())
+    .then(d => {
+      data[activeTabIndex].salida = d.ast;
+    });
+  }
+
     return (
       <div className="toolbar">
         <nav className="navbar navbar-expand-lg navbar-dark bg-danger">
@@ -122,7 +137,7 @@ function Toolbar() {
                   
                 </li>
                 <li className="nav-item">
-                      <a className="nav-link active" aria-current="page" href="#">Ejecutar</a>
+                      <button className="nav-link active" aria-current="page" onClick={ejecutar}>Ejecutar</button>
                 </li>
                 <li className="nav-item dropdown">
                   <a

@@ -8,7 +8,7 @@
     "start": "nodemon build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "jison": "jison src/Analyzer/grammar.jison -o src/Analyzer/grammar.js -m es6"
+    "jison": "jison src/Analyzer/grammar.jison -o src/Analyzer/grammar.js"
   },
   "keywords": [],
   "type": "module",

@@ -4,7 +4,7 @@ export const DataContext = createContext();
 
 const dataFija =[
 {nombre: "Instrucciones.sql",
-contenido: "SELECT * FROM tabla1;",
+contenido: " DECLARE @numero INT DEFAULT 5;",
 salida: "Esta es la salida",
 ruta: "C:/Users/Usuario/Desktop/Instrucciones.sql"},
 {nombre: "Instrucciones2.sql",

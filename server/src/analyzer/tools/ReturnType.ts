@@ -1,12 +1,12 @@
-import { type } from "./Type"
+import { Type } from "./Type"
 
 export default class ReturnType {
 
-    public type: type;
+    public Type: Type;
     public value: any;
 
-    constructor(type: type, value: any) {
-        this.type = type;
+    constructor(Type: Type, value: any) {
+        this.Type = Type;
         this.value = value;
     }
 
