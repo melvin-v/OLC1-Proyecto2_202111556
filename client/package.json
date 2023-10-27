@@ -16,7 +16,8 @@
     "js-file-download": "^0.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "thememirror": "^2.0.1"
+    "thememirror": "^2.0.1",
+    "viz.js": "^2.1.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

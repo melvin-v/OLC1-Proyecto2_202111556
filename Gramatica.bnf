@@ -1,0 +1,88 @@
+ini : instructions EOF                                             
+
+instructions : instructions instruction                           
+        | instruction                                          
+;
+
+instruction : 'DECLARE' declaraciones ';'                          
+    | set ';'                                              
+    | create_table ';'                                             
+    | alter_table ';'                                              
+    | drop ';'                                             
+    | insert ';'                                             
+    | select ';'                                             
+
+
+declaraciones : declaraciones ',' declaracion 
+    | declaracion 
+
+declaracion:  '@' TK_IDENTIFIER tipodato 
+    | '@' TK_IDENTIFIER tipodato 'DEFAULT'expression 
+
+
+set : 'SET' '@' TK_IDENTIFIER '=' expression 
+
+
+
+create_table: 'CREATE' 'TABLE' TK_IDENTIFIER '(' columns ')'  
+
+columns: columns ',' column 
+    | column 
+
+column: TK_IDENTIFIER tipodato 
+
+
+alter_table: 'ALTER' 'TABLE' TK_IDENTIFIER accion_alter 
+
+accion_alter: 'ADD' TK_IDENTIFIER tipodato 
+    | 'DROP' 'COLUMN' TK_IDENTIFIER 
+    | 'RENAME''TO' TK_IDENTIFIER 
+    | 'RENAME' 'COLUMN' TK_IDENTIFIER 'TO' TK_IDENTIFIER 
+
+
+drop : 'DROP' 'TABLE' TK_IDENTIFIER 
+
+//DML
+insert : 'INSERT' 'INTO' TK_IDENTIFIER '(' cabeceras ')' 'VALUES' '(' valores ')'
+
+cabeceras : cabeceras ',' TK_IDENTIFIER 
+    | TK_IDENTIFIER { $$ = [$1]; }
+    
+valores : valores ',' expression 
+    | expression 
+    
+select : 'SELECT' seleciones 'FROM' TK_IDENTIFIER 
+       | 'SELECT' '*' 'FROM' TK_IDENTIFIER 
+
+seleciones : seleciones ',' TK_IDENTIFIER 
+    | TK_IDENTIFIER 
+    
+
+expression :     expression '+' expression                              
+               | expression '-' expression                        
+               | expression '*' expression                          
+               | expression '/' expression                           
+               | expression '==' expression                            
+               | expression '!=' expression                           
+               | expression '<=' expression                           
+               | expression '>=' expression                          
+               | expression '<' expression                            
+               | expression '>' expression                           
+               | '-' exp                                                
+               | exp                                                     
+
+
+exp :   TK_IDENTIFIER 
+    | TK_VALUE_VARCHAR 
+    | TK_VALUE_INT 
+    | TK_VALUE_BOOLEAN 
+    | TK_VALUE_DOUBLE 
+    | TK_VALUE_DATE 
+    | TK_VALUE_NULL 
+
+
+tipodato : 'INT'     
+        | 'DOUBLE'  
+        | 'VARCHAR' 
+        | 'BOOLEAN' 
+        | 'DATE'    

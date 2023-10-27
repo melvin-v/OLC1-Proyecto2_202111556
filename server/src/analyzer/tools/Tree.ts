@@ -4,12 +4,14 @@ import Exception from "./Exception.js";
 
 export default class Tree {
 
-    public instructions: Array<any>; // change late
+    public instructions: Array<any>;
     public errors: Array<Exception>;
     public console: string;
     public globalTable: Environment | undefined;
     public dot: string;
     private count: number;
+    public tokens: Array<any>;
+
 
     constructor(instructions: Array<any>) {
         this.instructions = instructions;
@@ -17,6 +19,7 @@ export default class Tree {
         this.errors = [];
         this.dot = '';
         this.count = 0;
+        this.tokens = [];
     }
 
     public updateConsole(input: string) {

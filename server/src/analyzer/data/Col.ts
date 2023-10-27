@@ -1,6 +1,6 @@
 import { Type } from "../tools/Type";
 
-export class Columna {
+export class Col {
     public id: string;
     public type: Type
     public values: any[];

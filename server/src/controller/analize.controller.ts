@@ -5,6 +5,9 @@ import { Instruccion } from "../Analyzer/abstract/Instruction.js";
 // @ts-ignore
 import { grammar, errors, clean_errors } from '../Analyzer/grammar.js'
 import { Node } from "../Analyzer/abstract/Node.js";
+import { Data } from "../Analyzer/data/Data.js";
+
+
 
 interface outParse {
     "console": string,
@@ -29,22 +32,32 @@ export const analyze = (req: Request, res: Response) => {
 }
 
 const interpret = (bufferStrem: string): outParse => {
+    const data = Data.getInstance();
     let tree: Tree | null;
     let globalTable: Environment | null;
 
     let instructions: Array<Instruccion>;
-    console.log(bufferStrem);
     instructions = grammar.parse(bufferStrem);
     
     tree = new Tree(instructions);
     globalTable = new Environment(undefined, undefined);
     tree.globalTable = globalTable;
-
+    for (let instr of instructions) {
+        try{
+        instr.interpret(tree, globalTable);}
+        catch(error){
+            console.log(error);
+        }
+    }
     let rootAst: Node = new Node("Root");
     let value: Node = new Node("Instructions");
 
     for (let item of tree.instructions) {
-        value.addChildsNode(item.getAST());
+        try{
+        value.addChildsNode(item.getAST());}
+        catch(error){
+            console.log(error);
+        }
     }
 
     rootAst.addChildsNode(value);
@@ -53,9 +66,60 @@ const interpret = (bufferStrem: string): outParse => {
     return {
         "console": tree.console,
         "ast": ast,
-        "reporte_tokens": "test",
-        "reporte_errores": "test",
+        "reporte_tokens": crearTablaHTMLTokens(data.tokens),
+        "reporte_errores": crearTablaHTMLErrores(data.errores),
         "reporte_simbolos": "test"
     }
     
 }
+function crearTablaHTMLTokens(datos: any[]) {
+    // Inicializa la variable que contendrá el HTML de la tabla
+    let tablaHTML = '<table>';
+  
+    // Encabezados de tabla
+    tablaHTML += '<tr>';
+    tablaHTML += '<th>Tipo</th>';
+    tablaHTML += '<th>Valor</th>';
+    tablaHTML += '</tr>';
+  
+    // Recorre el arreglo de datos y agrega filas a la tabla
+    datos.forEach(dato => {
+      tablaHTML += '<tr>';
+      tablaHTML += `<td>${dato.Tipo}</td>`;
+      tablaHTML += `<td>${dato.Valor}</td>`;
+      tablaHTML += '</tr>';
+    });
+  
+    // Cierra la tabla
+    tablaHTML += '</table>';
+  
+    return tablaHTML;
+  }
+
+  function crearTablaHTMLErrores(datos: any[]) {
+    // Inicializa la variable que contendrá el HTML de la tabla
+    let tablaHTML = '<table>';
+  
+    // Encabezados de tabla
+    tablaHTML += '<tr>';
+    tablaHTML += '<th>Linea</th>';
+    tablaHTML += '<th>Columna</th>';
+    tablaHTML += '<th>Tipo</th>';
+    tablaHTML += '<th>Mensaje</th>';
+    tablaHTML += '</tr>';
+  
+    // Recorre el arreglo de datos y agrega filas a la tabla
+    datos.forEach(dato => {
+      tablaHTML += '<tr>';
+      tablaHTML += `<td>${dato.line}</td>`;
+      tablaHTML += `<td>${dato.column}</td>`;
+      tablaHTML += `<td>${dato.type}</td>`;
+      tablaHTML += `<td>${dato.message}</td>`;
+      tablaHTML += '</tr>';
+    });
+  
+    // Cierra la tabla
+    tablaHTML += '</table>';
+  
+    return tablaHTML;
+  }

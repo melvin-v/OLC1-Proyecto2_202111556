@@ -3,14 +3,13 @@ import {createContext, useState} from "react";
 export const DataContext = createContext();
 
 const dataFija =[
-{nombre: "Instrucciones.sql",
-contenido: " DECLARE @numero INT DEFAULT 5;",
-salida: "Esta es la salida",
-ruta: "C:/Users/Usuario/Desktop/Instrucciones.sql"},
-{nombre: "Instrucciones2.sql",
-contenido: "SELECT * FROM tabla2;",
-salida: "Esta es la salida",
-ruta: "C:/Users/Usuario/Desktop/Instrucciones2.sql"}]
+{nombre: "new.sql",
+contenido: " ",
+salida: "",
+ruta: "C:/Users/Usuario/Desktop/Instrucciones.sql",
+tokens: "",
+errores: "",
+ast: ""}]
 
 export const DataProvider = ({children}) => {
     const [data, setData] = useState(dataFija);

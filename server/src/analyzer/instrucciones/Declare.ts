@@ -6,6 +6,7 @@ import Environment from "../tools/Environment.js";
 import ReturnType from "../tools/ReturnType.js";
 import Symbol from "../tools/Symbol.js";
 import { Node } from "../abstract/Node.js";
+import { retornarTipo } from "../tools/retornarTipo.js";
 
 
 export class Declare implements Instruccion {
@@ -33,30 +34,7 @@ export class Declare implements Instruccion {
 
     getAST(): Node {
         let node: Node = new Node('DECLARE');
-        if(this.type == Type.INT){
-            node.addChild('int');
-        }
-        else if(this.type == Type.DOUBLE){
-            node.addChild('double');
-        }
-        else if(this.type == Type.BOOLEAN){
-            node.addChild('boolean');
-        }
-        else if(this.type == Type.VARCHAR){
-            node.addChild('varchar');
-        }
-        else if(this.type == Type.DATE){
-            node.addChild('date');
-        }
-        else if(this.type == Type.NULL){
-            node.addChild('null');
-        }
-        else if(this.type == Type.NEGATIVE){
-            node.addChild('negative');
-        }
-        else{
-            node.addChild('???');
-        }
+        node.addChild(retornarTipo(this.type));
         node.addChild(this.id);
         node.addChildsNode(this.expression.getAST());
 

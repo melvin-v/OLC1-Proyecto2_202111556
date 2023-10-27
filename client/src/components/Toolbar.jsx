@@ -1,5 +1,8 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DataContext } from "../DataContext";
+import Viz from "viz.js";
+import { Module, render } from "viz.js/full.render.js";
+
 function Toolbar() {
   const { data, setData, activeTabIndex, setActiveTabIndex } = useContext(DataContext);
 
@@ -16,6 +19,9 @@ function Toolbar() {
       contenido: "",
       salida: "",
       ruta: "",
+      tokens: "",
+      errores: "",
+      ast: ""
     });
     setData(newData);
     setActiveTabIndex(newData.length - 1);
@@ -33,6 +39,9 @@ function Toolbar() {
           contenido: e.target.result,
           salida: "",
           ruta: URL.createObjectURL(archivo),
+          tokens: "",
+          errores: "",
+          ast: ""
         }
         
         setActiveTabIndex(newData.length);
@@ -70,6 +79,7 @@ function Toolbar() {
   }
 
   const ejecutar = () => {
+    console.log('Hola')
     fetch('http://localhost:3000/analizar', {
       headers: {
         'Content-Type': 'application/json'
@@ -80,10 +90,45 @@ function Toolbar() {
       })
     }).then(res => res.json())
     .then(d => {
-      data[activeTabIndex].salida = d.ast;
+      console.log(d)
+      data[activeTabIndex].salida = d.console;
+      data[activeTabIndex].tokens = d.reporte_tokens;
+      data[activeTabIndex].errores = d.reporte_errores;
+      data[activeTabIndex].ast = d.ast;
     });
   }
-
+  const generateAndDownloadImage = (dotSource) => {
+    return new Promise(async (resolve, reject) => {
+      const viz = new Viz({ Module, render });
+  
+      try {
+        const svgContent = await viz.renderString(dotSource, { format: "svg" });
+  
+        // Crea un blob SVG
+        const svgBlob = new Blob([svgContent], { type: "image/svg+xml" });
+  
+        // Crea una URL del blob y crea un enlace de descarga
+        const svgUrl = URL.createObjectURL(svgBlob);
+        const link = document.createElement("a");
+        link.href = svgUrl;
+        link.download = "graph.svg";
+        link.click();
+        resolve();
+      } catch (error) {
+        console.error("Error al generar la imagen DOT:", error);
+        reject(error);
+      }
+    });
+  }
+  function descargarComoArchivo(texto, nombreArchivo) {
+    const blob = new Blob([texto], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const enlace = document.createElement("a");
+    enlace.href = url;
+    enlace.download = nombreArchivo;
+    enlace.click();
+    URL.revokeObjectURL(url);
+  }
     return (
       <div className="toolbar">
         <nav className="navbar navbar-expand-lg navbar-dark bg-danger">
@@ -151,14 +196,14 @@ function Toolbar() {
                   </a>
                   <ul className="dropdown-menu">
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <button className="dropdown-item" onClick={()=>descargarComoArchivo(data[activeTabIndex].tokens, "Tokens")}>
                         Reporte de tokens
-                      </a>
+                      </button>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <button className="dropdown-item" onClick={()=>descargarComoArchivo(data[activeTabIndex].errores, "Errores")}>
                         Reporte de errores
-                      </a>
+                      </button>
                     </li>
                     <li>
                       <a className="dropdown-item" href="#">
@@ -166,9 +211,9 @@ function Toolbar() {
                       </a>
                     </li>
                     <li>
-                      <a className="dropdown-item" href="#">
+                      <button className="dropdown-item" onClick={() =>generateAndDownloadImage(data[activeTabIndex].ast)}>
                         General arbol de analisis sintactico
-                      </a>
+                      </button>
                     </li>
                   </ul>
                 </li>
